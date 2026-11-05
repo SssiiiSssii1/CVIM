@@ -9,3 +9,12 @@ data
 
 # Nested CVIM checkout folder — this dir itself is now the CVIM repo
 CVIM/
+
+# local-only editor cruft
+.DS_Store
+*.swp
+*.swo
+*.bak
+
+# superseded draft of BEGINNER_GUIDE.md — keep locally, skip in repo
+Untitled
