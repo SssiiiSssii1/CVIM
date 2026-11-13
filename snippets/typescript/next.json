@@ -1,0 +1,101 @@
+{
+  "Next.js Route Handler GET": {
+    "prefix": "nroute",
+    "body": [
+      "import type { NextRequest } from \"next/server\"",
+      "",
+      "export async function GET(request: NextRequest) {",
+      "  return Response.json({ message: \"Hello from Next.js!\" })",
+      "}"
+    ],
+    "description": "App Router route.ts GET handler"
+  },
+  "Next.js dynamic Route Handler": {
+    "prefix": "nroutedyn",
+    "body": [
+      "import type { NextRequest } from \"next/server\"",
+      "",
+      "export async function GET(",
+      "  _request: NextRequest,",
+      "  { params }: { params: Promise<{ ${1:id}: string }> },",
+      ") {",
+      "  const { ${1:id} } = await params",
+      "  return Response.json({ ${1:id} })",
+      "}"
+    ],
+    "description": "App Router dynamic route handler with awaited params"
+  },
+  "Next.js Server Action file": {
+    "prefix": "nserveraction",
+    "body": [
+      "\"use server\"",
+      "",
+      "export async function ${1:action}(${2:formData}: FormData) {",
+      "  ${0}",
+      "}"
+    ],
+    "description": "Server Actions module with the use server directive"
+  },
+  "Next.js inline server action": {
+    "prefix": "ninlineaction",
+    "body": [
+      "async function ${1:action}(${2:formData}: FormData) {",
+      "  \"use server\"",
+      "  ${0}",
+      "}"
+    ],
+    "description": "Inline Server Action inside a server file"
+  },
+  "Next.js 16 proxy": {
+    "prefix": "nproxy",
+    "body": [
+      "import { NextResponse } from \"next/server\"",
+      "import type { NextRequest } from \"next/server\"",
+      "",
+      "export function proxy(_request: NextRequest) {",
+      "  return NextResponse.next()",
+      "}",
+      "",
+      "export const config = {",
+      "  matcher: [\"/dashboard/:path*\"],",
+      "}"
+    ],
+    "description": "Next.js 16 proxy.ts convention"
+  },
+  "Next.js legacy middleware": {
+    "prefix": "nmiddleware",
+    "body": [
+      "import { NextResponse } from \"next/server\"",
+      "import type { NextRequest } from \"next/server\"",
+      "",
+      "// Deprecated in Next.js 16: rename this file to proxy.ts",
+      "// and the export to `proxy`.",
+      "export function middleware(_request: NextRequest) {",
+      "  return NextResponse.next()",
+      "}",
+      "",
+      "export const config = {",
+      "  matcher: [\"/dashboard/:path*\"],",
+      "}"
+    ],
+    "description": "Legacy middleware.ts convention (deprecated in Next 16)"
+  },
+  "Next.js Pages Router API route": {
+    "prefix": "npageapi",
+    "body": [
+      "import type { NextApiRequest, NextApiResponse } from \"next\"",
+      "",
+      "type ${1:ResponseData} = {",
+      "  ${2:message}: string",
+      "}",
+      "",
+      "export default function handler(",
+      "  _request: NextApiRequest,",
+      "  response: NextApiResponse<${1:ResponseData}>,",
+      ") {",
+      "  response.status(200).json({ ${2:message}: \"Hello from Next.js!\" })",
+      "}"
+    ],
+    "description": "Pages Router API route with typed response"
+  }
+}

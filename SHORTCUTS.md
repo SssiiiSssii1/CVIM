@@ -193,6 +193,32 @@ help, `q` or `Esc` closes it.
 | `]w` / `[w` | Next / previous warning |
 | `Space uf` / `Space uF` | Toggle auto-format globally / for buffer |
 | `Space ud` | Toggle diagnostics |
+| `Space uh` | Toggle inlay hints (TypeScript) |
+
+## Next.js snippets
+
+Type the prefix in a `.tsx` buffer (`typescriptreact`) and accept it with Blink
+(`Ctrl+Space` or `Enter` in the menu). Snippets expand the App Router/React
+boilerplate; tab stops are editable.
+
+| Prefix | Expands to |
+| --- | --- |
+| `npage` / `npagedyn` | App Router page (static / awaited `params`) |
+| `npageprops` | Page using the generated `PageProps<...>` helper |
+| `nlayout` / `nrootlayout` | Segment layout / root layout with `<html>`/`<body>` |
+| `nloading` / `nerror` / `nglobalerror` / `nnotfound` | App Router special files |
+| `nclient` / `nmetadata` | Client Component / static `Metadata` export |
+| `nstaticprops` / `nserversideprops` | Pages Router pages with typed data fetching |
+| `ninlineaction` | Inline Server Action |
+
+In `.ts` buffers (`typescript`):
+
+| Prefix | Expands to |
+| --- | --- |
+| `nroute` / `nroutedyn` | App Router route handler (static / awaited dynamic params) |
+| `nserveraction` | Server Actions module (`"use server"`) |
+| `nproxy` / `nmiddleware` | Next.js 16 `proxy.ts` / legacy `middleware.ts` |
+| `npageapi` | Pages Router API route with typed response |
 
 ## Git
 
@@ -240,6 +266,11 @@ remote and `gh` authentication.
 
 Go uses `delve`, TypeScript/JavaScript uses `js-debug-adapter`, Rust/C/C++ use
 `codelldb`. LazyVim also reads `.vscode/launch.json`.
+
+For JS/TS, `Space dc` also lists `Next.js: server-side` (runs `npm run dev`),
+`Next.js: attach to server` (attach to an already running dev server), and
+`Next.js: client-side (Chrome)` (requires Chrome/Chromium; Firefox is not
+supported by js-debug's client-side mode).
 
 ## Tests (neotest)
 

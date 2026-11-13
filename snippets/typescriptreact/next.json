@@ -1,0 +1,228 @@
+{
+  "Next.js App Router page": {
+    "prefix": "npage",
+    "body": [
+      "export default function ${1:Page}() {",
+      "  return (",
+      "    <main>",
+      "      ${0}",
+      "    </main>",
+      "  )",
+      "}"
+    ],
+    "description": "App Router page component"
+  },
+  "Next.js App Router dynamic page (Promise params)": {
+    "prefix": "npagedyn",
+    "body": [
+      "export default async function ${1:Page}({",
+      "  params,",
+      "}: {",
+      "  params: Promise<{ ${2:slug}: string }>",
+      "}) {",
+      "  const { ${2:slug} } = await params",
+      "",
+      "  return (",
+      "    <main>",
+      "      ${0}",
+      "    </main>",
+      "  )",
+      "}"
+    ],
+    "description": "App Router page with awaited dynamic params"
+  },
+  "Next.js App Router page with PageProps": {
+    "prefix": "npageprops",
+    "body": [
+      "export default async function ${1:Page}(props: PageProps<\"/${2:blog/[slug]}\">) {",
+      "  const { ${3:slug} } = await props.params",
+      "",
+      "  return (",
+      "    <main>",
+      "      ${0}",
+      "    </main>",
+      "  )",
+      "}"
+    ],
+    "description": "App Router page typed with the generated PageProps helper"
+  },
+  "Next.js App Router layout": {
+    "prefix": "nlayout",
+    "body": [
+      "export default function ${1:Layout}({",
+      "  children,",
+      "}: {",
+      "  children: React.ReactNode",
+      "}) {",
+      "  return <section>{children}</section>",
+      "}"
+    ],
+    "description": "App Router segment layout"
+  },
+  "Next.js App Router root layout": {
+    "prefix": "nrootlayout",
+    "body": [
+      "export default function ${1:RootLayout}({",
+      "  children,",
+      "}: {",
+      "  children: React.ReactNode",
+      "}) {",
+      "  return (",
+      "    <html lang=\"${2:en}\">",
+      "      <body>{children}</body>",
+      "    </html>",
+      "  )",
+      "}"
+    ],
+    "description": "App Router root layout with html/body"
+  },
+  "Next.js App Router loading": {
+    "prefix": "nloading",
+    "body": [
+      "export default function Loading() {",
+      "  return <p>Loading...</p>",
+      "}"
+    ],
+    "description": "App Router loading.tsx Suspense fallback"
+  },
+  "Next.js App Router error boundary": {
+    "prefix": "nerror",
+    "body": [
+      "\"use client\"",
+      "",
+      "import { useEffect } from \"react\"",
+      "",
+      "export default function Error({",
+      "  error,",
+      "  retry,",
+      "}: {",
+      "  error: Error & { digest?: string }",
+      "  retry: () => void",
+      "}) {",
+      "  useEffect(() => {",
+      "    console.error(error)",
+      "  }, [error])",
+      "",
+      "  return (",
+      "    <div>",
+      "      <h2>Something went wrong!</h2>",
+      "      <button onClick={() => retry()}>Try again</button>",
+      "    </div>",
+      "  )",
+      "}"
+    ],
+    "description": "App Router error boundary (Next.js 16 retry prop)"
+  },
+  "Next.js App Router global error": {
+    "prefix": "nglobalerror",
+    "body": [
+      "\"use client\"",
+      "",
+      "export default function GlobalError({",
+      "  error,",
+      "  retry,",
+      "}: {",
+      "  error: Error & { digest?: string }",
+      "  retry: () => void",
+      "}) {",
+      "  return (",
+      "    <html>",
+      "      <body>",
+      "        <h2>Something went wrong!</h2>",
+      "        <button onClick={() => retry()}>Try again</button>",
+      "      </body>",
+      "    </html>",
+      "  )",
+      "}"
+    ],
+    "description": "App Router global-error.tsx (html/body required)"
+  },
+  "Next.js App Router not found": {
+    "prefix": "nnotfound",
+    "body": [
+      "import Link from \"next/link\"",
+      "",
+      "export default function NotFound() {",
+      "  return (",
+      "    <main>",
+      "      <h2>Not Found</h2>",
+      "      <p>Could not find requested resource</p>",
+      "      <Link href=\"/\">Return Home</Link>",
+      "    </main>",
+      "  )",
+      "}"
+    ],
+    "description": "App Router not-found.tsx"
+  },
+  "Next.js client component": {
+    "prefix": "nclient",
+    "body": [
+      "\"use client\"",
+      "",
+      "export function ${1:Component}() {",
+      "  return (",
+      "    <div>",
+      "      ${0}",
+      "    </div>",
+      "  )",
+      "}"
+    ],
+    "description": "Client Component with the use client directive"
+  },
+  "Next.js metadata export": {
+    "prefix": "nmetadata",
+    "body": [
+      "import type { Metadata } from \"next\"",
+      "",
+      "export const metadata: Metadata = {",
+      "  title: \"${1:Title}\",",
+      "  description: \"${2:Description}\",",
+      "}"
+    ],
+    "description": "Static Metadata export for a layout or page"
+  },
+  "Next.js inline server action": {
+    "prefix": "ninlineaction",
+    "body": [
+      "async function ${1:action}(${2:formData}: FormData) {",
+      "  \"use server\"",
+      "  ${0}",
+      "}"
+    ],
+    "description": "Inline Server Action inside a Server Component"
+  },
+  "Next.js Pages Router getStaticProps page": {
+    "prefix": "nstaticprops",
+    "body": [
+      "import type { GetStaticProps, InferGetStaticPropsType } from \"next\"",
+      "",
+      "export const getStaticProps = (async () => {",
+      "  return { props: { ${1:data} } }",
+      "}) satisfies GetStaticProps<{ ${1:data}: ${2:string} }>",
+      "",
+      "export default function ${3:Page}({",
+      "  ${1:data},",
+      "}: InferGetStaticPropsType<typeof getStaticProps>) {",
+      "  return <main>${0}</main>",
+      "}"
+    ],
+    "description": "Pages Router page with typed getStaticProps"
+  },
+  "Next.js Pages Router getServerSideProps page": {
+    "prefix": "nserversideprops",
+    "body": [
+      "import type { GetServerSideProps, InferGetServerSidePropsType } from \"next\"",
+      "",
+      "export const getServerSideProps = (async () => {",
+      "  return { props: { ${1:data} } }",
+      "}) satisfies GetServerSideProps<{ ${1:data}: ${2:string} }>",
+      "",
+      "export default function ${3:Page}({",
+      "  ${1:data},",
+      "}: InferGetServerSidePropsType<typeof getServerSideProps>) {",
+      "  return <main>${0}</main>",
+      "}"
+    ],
+    "description": "Pages Router page with typed getServerSideProps"
+  }
+}

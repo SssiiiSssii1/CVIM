@@ -10,6 +10,12 @@
 -- globally; toggle it temporarily with <leader>uf (global) or <leader>uF (buffer).
 vim.g.autoformat = true
 
+-- LazyVim's built-in ESLint auto-format delegates to conform, which skips the
+-- ESLint LSP formatter whenever a conform formatter (Prettier/Biome) exists.
+-- Disable that layer here and register an equivalent formatter that always
+-- runs first; see lua/plugins/formatting.lua.
+vim.g.lazyvim_eslint_auto_format = false
+
 -- Keep a little context around the cursor.
 vim.opt.scrolloff = 8
 vim.opt.sidescrolloff = 8

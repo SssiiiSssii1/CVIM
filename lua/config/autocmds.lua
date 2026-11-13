@@ -22,6 +22,15 @@ vim.api.nvim_create_autocmd("FileType", {
 -- Reuse the YAML Treesitter parser for the Compose subtype.
 vim.treesitter.language.register("yaml", "yaml.docker-compose")
 
+-- nvim-treesitter has no dedicated JSONC parser; JSON5 handles JSONC comments
+-- and trailing commas without treating valid project config as syntax errors.
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "jsonc",
+  callback = function()
+    vim.treesitter.language.register("json5", "jsonc")
+  end,
+})
+
 -- Keep editor indentation aligned with each ecosystem's formatter:
 --   Go uses tabs with a 4-column display width.
 --   Rust and C/C++ use 4 spaces.

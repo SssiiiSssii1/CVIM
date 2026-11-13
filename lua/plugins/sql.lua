@@ -33,6 +33,23 @@ end
 
 return {
   {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        sqls = {
+          filetypes = { "sql", "mysql", "plsql" },
+          root_markers = { "config.yml", ".git" },
+        },
+      },
+    },
+  },
+  {
+    "mason-org/mason.nvim",
+    opts = {
+      ensure_installed = { "sqls" },
+    },
+  },
+  {
     "stevearc/conform.nvim",
     optional = true,
     opts = {

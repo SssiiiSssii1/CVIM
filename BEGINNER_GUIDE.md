@@ -86,8 +86,9 @@ These work when the language server for the file is installed:
 - `Space ch` — switch between a C/C++ source and header
 
 Formatting runs automatically when you save (C/C++, Go, TypeScript/JavaScript,
-JSON, YAML, TOML, Rust, Dockerfile, Markdown, SQL, and shell). `Space uf`
-toggles auto-format. C/C++ uses `clangd` for code intelligence and
+HTML, CSS/SCSS, JSON/JSONC, YAML, TOML, Rust, Dockerfile, Markdown, SQL, and
+shell). Prisma uses its language-server formatter. `Space uf` toggles
+auto-format. C/C++ uses `clangd` for code intelligence and
 `clang-format` for formatting; a project `.clang-format` file is respected,
 otherwise the fallback uses 4 spaces and a 120-column limit. Go uses tabs with
 a 4-column width, Rust and C/C++ use 4 spaces, and TypeScript, Lua, JSON, YAML,
@@ -98,13 +99,23 @@ TOML, Markdown, and shell keep 2 spaces.
 - `Space D` or `:DBUI` opens the database sidebar. Use `:DBUIAddConnection`
   to add a connection, or set `vim.g.dbs` in your config.
 - `:DB` runs a one-off query through Dadbod.
+- `sqls` provides SQL language-server features. It uses a project `config.yml`
+  for database-aware completion; keep connection credentials in a local,
+  untracked config file.
 - SQL is formatted and linted by `sqlfluff`. A project `.sqlfluff`,
   `pyproject.toml`, or similar config is respected. For scratch queries the
   default dialect is ANSI; set `vim.g.sql_dialect = "postgres"` (or `"mysql"`,
   etc.) if your queries use another dialect.
-- SQL completion comes from Neovim's SQL syntax plus Dadbod; there is no SQL
-  language server in this setup, so completion is lighter than in
-  TypeScript/Go/Rust.
+- Dadbod completion can supplement `sqls` completion when a database
+  connection is configured.
+
+### Prisma
+
+- `prismals` provides Prisma schema diagnostics, completion, hover, and code
+  actions. Mason installs `prisma-language-server`, and Treesitter installs
+  its Prisma parser.
+- Prisma formatting is provided by the language server, without requiring a
+  globally installed Prisma CLI.
 
 ### Markdown
 

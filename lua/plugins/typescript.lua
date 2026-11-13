@@ -1,17 +1,26 @@
--- TypeScript/NestJS completion and auto-import tuning.
+-- TypeScript/React/Next.js completion and auto-import tuning.
 --
 -- LazyVim already provides vtsls, blink.cmp, and the TypeScript keymaps
 -- (<leader>co organize imports, <leader>cM add missing imports, <leader>cD
 -- fix all). LazyVim also enables workspace TypeScript, auto-imports,
 -- completeFunctionCalls, and server-side fuzzy matching.
 --
--- The vtsls settings changed here are the module specifier style and the
--- decorator mode used for files outside a tsconfig:
+-- The vtsls settings changed here are the module specifier style, package
+-- auto-import behavior, and the decorator mode used for files outside a
+-- tsconfig:
 --
 --   * importModuleSpecifier = "non-relative" prefers tsconfig "paths" aliases
---     (for example "@/entities/...") over relative imports. LazyVim's default
---     "shortest" chooses a relative path when it is shorter, which ignores the
---     project's alias convention.
+--     (for example "@/entities/..." or "@/components/...") over relative
+--     imports. LazyVim's default "shortest" chooses a relative path when it is
+--     shorter, which ignores the project's alias convention.
+--   * includePackageJsonAutoImports = "on" makes dependencies listed in
+--     package.json available to auto-import/suggestions even when tsserver
+--     has not indexed the whole dependency graph yet. Monorepos still use
+--     vtsls' built-in per-package tsconfig discovery.
+--   * useAliasesForRenames keeps file renames using the same alias style.
+--   * suggest.autoImports + includeCompletionsForModuleExports make missing
+--     imports show up as completion items, not only through the
+--     source.addMissingImports code action.
 --   * js/ts.implicitProjectConfig.experimentalDecorators keeps legacy
 --     decorators working in tsserver's "inferred project" (the fallback used
 --     for files that no tsconfig.json/jsconfig.json covers). The project uses
@@ -186,6 +195,12 @@ return {
             typescript = {
               preferences = {
                 importModuleSpecifier = "non-relative",
+                includePackageJsonAutoImports = "on",
+                useAliasesForRenames = true,
+              },
+              suggest = {
+                autoImports = true,
+                includeCompletionsForModuleExports = true,
               },
             },
             -- Files that are not covered by a tsconfig.json/jsconfig.json are

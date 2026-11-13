@@ -1,9 +1,24 @@
--- Formatting for file types that LazyVim's extras don't fully cover.
+-- Formatting for web and non-LazyVim file types.
+--
+-- Web formatter policy:
+--   0. ESLint LSP fixes run first (registered by this file as a LazyVim
+--      formatter, priority 200). This is the only step that applies
+--      auto-fixable lint problems; it does not format code.
+--   1. Biome, when the project has a biome.json/biome.jsonc. The LazyVim
+--      biome extra's `biome-check` formatter formats, lints, and organizes
+--      imports. `require_cwd` makes it unavailable when no Biome config is
+--      found, so a Biome project is never formatted by Prettier too.
+--   2. Prettier (Mason CLI) for everything else. It reads the project's
+--      .prettierrc/.editorconfig automatically.
+--   3. `bun fmt` only as a fallback when Prettier is not installed. It is
+--      Prettier-compatible and must be on PATH, not Mason.
+-- `stop_after_first` is what prevents a Biome project from also running
+-- Prettier.
+--
 -- TOML uses the taplo CLI (the LSP formatter currently returns no edits),
 -- Dockerfiles use dockerfmt, C/C++ use clang-format, and Rust uses rustfmt.
--- TypeScript/JavaScript/JSX/TSX format through Bun's built-in `bun fmt`
--- (Prettier-compatible, Bun 1.4+); it must be on PATH, not Mason.
--- All other formatters are installed by Mason (rustfmt comes from rustup).
+-- All Mason-managed formatters are installed by Mason (rustfmt comes from
+-- rustup).
 --
 -- On Fedora, clang-format can also be installed system-wide with:
 --   sudo dnf install -y clang-tools-extra
@@ -13,7 +28,7 @@
 -- add another BufWritePre autocmd or set `format_on_save` here: that would
 -- format twice. LazyVim's default `lsp_format = "fallback"` means clangd only
 -- formats when conform has no formatter, so clang-format and clangd do not
--- conflict.
+-- conflict. The same fallback keeps cssls/html from competing with Prettier.
 
 -- Prefer clang-format from PATH (Mason prepends its bin directory). If the
 -- plugin has not updated PATH yet, fall back to Mason's known install path.
@@ -30,17 +45,67 @@ end
 
 return {
   {
+    "neovim/nvim-lspconfig",
+    -- LazyVim's own ESLint formatter goes through conform, and conform's
+    -- `lsp_format = "fallback"` skips it whenever Prettier/Biome is available.
+    -- Run the ESLint LSP formatter directly instead, before conform runs, so
+    -- `eslint --fix` code actions apply and Prettier/Biome still formats after.
+    -- `lazyvim_eslint_auto_format = false` in config/options.lua prevents the
+    -- original formatter from being registered twice.
+    init = function()
+      LazyVim.format.register({
+        name = "eslint: lsp",
+        primary = false,
+        priority = 200,
+        sources = function(buf)
+          local clients = vim.lsp.get_clients({
+            bufnr = buf,
+            name = "eslint",
+            method = "textDocument/formatting",
+          })
+          return vim.tbl_map(function(client)
+            return client.name
+          end, clients)
+        end,
+        format = function(buf)
+          vim.lsp.buf.format({
+            bufnr = buf,
+            filter = function(client)
+              return client.name == "eslint"
+            end,
+            timeout_ms = 10000,
+          })
+        end,
+      })
+    end,
+    opts = function(_, opts)
+      opts.servers = opts.servers or {}
+      opts.servers.eslint = vim.tbl_deep_extend("force", opts.servers.eslint or {}, {
+        -- Keep the server able to answer textDocument/formatting even though
+        -- LazyVim's own auto-format layer is disabled.
+        settings = { format = true },
+      })
+    end,
+  },
+  {
     "stevearc/conform.nvim",
     optional = true,
     opts = {
       formatters_by_ft = {
-        -- Bun's built-in formatter for JavaScript/TypeScript. Listed as the
-        -- only entry so it fully replaces prettierd/prettier from LazyVim's
-        -- prettier extra. `.h`/`.cpp` notes below are unaffected.
-        javascript = { "bun-fmt" },
-        javascriptreact = { "bun-fmt" },
-        typescript = { "bun-fmt" },
-        typescriptreact = { "bun-fmt" },
+        -- One web formatter per save. biome-check is unavailable without a
+        -- Biome config (require_cwd), and prettier is skipped when Biome ran.
+        javascript = { "biome-check", "prettier", "bun-fmt", stop_after_first = true },
+        javascriptreact = { "biome-check", "prettier", "bun-fmt", stop_after_first = true },
+        typescript = { "biome-check", "prettier", "bun-fmt", stop_after_first = true },
+        typescriptreact = { "biome-check", "prettier", "bun-fmt", stop_after_first = true },
+        css = { "biome-check", "prettier", "bun-fmt", stop_after_first = true },
+        scss = { "biome-check", "prettier", "bun-fmt", stop_after_first = true },
+        less = { "biome-check", "prettier", "bun-fmt", stop_after_first = true },
+        json = { "biome-check", "prettier", "bun-fmt", stop_after_first = true },
+        jsonc = { "biome-check", "prettier", "bun-fmt", stop_after_first = true },
+        graphql = { "biome-check", "prettier", "bun-fmt", stop_after_first = true },
+        -- Biome does not support HTML yet, so Prettier is the only option.
+        html = { "prettier", "bun-fmt", stop_after_first = true },
         -- Neovim maps .c/.h to `c` and .cc/.cpp/.hpp to `cpp`; .h can also be
         -- detected as `cpp`. Both filetypes use clang-format.
         c = { "clang-format" },
@@ -81,6 +146,8 @@ return {
   },
   {
     "mason-org/mason.nvim",
-    opts = { ensure_installed = { "clang-format", "dockerfmt" } },
+    -- `biome` supplies both the LSP (`biome lsp-proxy`) and the biome-check
+    -- CLI. Prettier is installed by LazyVim's prettier extra.
+    opts = { ensure_installed = { "biome", "clang-format", "dockerfmt" } },
   },
 }
