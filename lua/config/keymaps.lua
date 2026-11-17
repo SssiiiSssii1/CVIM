@@ -22,6 +22,16 @@ vim.keymap.set("n", "<leader>H", function()
   vim.cmd.edit(vim.fn.fnameescape(vim.fn.stdpath("config") .. "/BEGINNER_GUIDE.md"))
 end, { desc = "Beginner Guide" })
 
+-- Alt+w: close the current split/pane. LazyVim already provides
+-- <leader>wd; this is just a shorter alternative. The terminal mapping
+-- leaves terminal mode first so it also works from a shell/terminal pane.
+-- (Ctrl+Q is avoided because many terminals use it for XON/XOFF flow control.)
+vim.keymap.set("n", "<M-w>", "<C-w>c", { desc = "Close Pane", remap = true })
+vim.keymap.set("t", "<M-w>", function()
+  vim.cmd("stopinsert")
+  vim.cmd("close")
+end, { desc = "Close Pane" })
+
 -- <leader>gC: browse and checkout a Git branch without leaving Neovim.
 vim.keymap.set("n", "<leader>gC", function()
   Snacks.picker.git_branches()
