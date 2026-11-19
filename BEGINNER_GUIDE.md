@@ -19,7 +19,7 @@ shows every keybinding that can follow. You do not need to memorize everything.
 - **Insert mode**: press `i` to type before the cursor, `a` to type after it,
   or `o` to open a new line below. Press `Esc` when finished typing.
 - **Visual mode**: press `v` for characters, `V` for whole lines, or `Ctrl+v`
-  `to delete, or`c` to
+  for a block. Select text, then press `y` to copy, `d` to delete, or `c` to
   change it.
 - **Command mode**: press `:` and type a command, then `Enter`.
 

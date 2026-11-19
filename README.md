@@ -1,6 +1,6 @@
 # CVIM
 
-My personal Neovim setup — **LazyVim** underneath, tuned for **competitive programming in C++** (and daily coding in TS/Python/SQL/Bash).
+My personal Neovim setup — **LazyVim** underneath, tuned for **competitive programming in C++** (and daily coding in TS/SQL/Bash).
 
 ## What's inside
 
@@ -16,7 +16,8 @@ My personal Neovim setup — **LazyVim** underneath, tuned for **competitive pro
   | `:CPTest` | compile, run against `input.txt`, diff with `expected.txt` |
 
   Extra C++ buffer keymaps are added automatically on opening a `.cpp` file.
-- **Web development** — TypeScript/React/Next.js (vtsls, ESLint, Blink completion), Tailwind CSS v3/v4, HTML/CSS/Emmet, Prettier or Biome formatting, Next.js snippets, and js-debug configurations
+- **Web development** — TypeScript/React/Next.js (vtsls, ESLint, oxlint, Blink completion), Tailwind CSS v3/v4, HTML/CSS/Emmet, Prettier or Biome formatting, Next.js snippets, and js-debug configurations
+- **Tests and linting** — neotest with Vitest and Jest adapters (picked from `package.json`), oxlint for TS/JS projects that install it, ESLint LSP for projects that use ESLint
 - **Language & QoL plugins** — TypeScript, Prisma, SQL, Bash, formatting on save, opencode, discord presence, terminal
 - **Docs** — [`BEGINNER_GUIDE.md`](BEGINNER_GUIDE.md) if you're starting out, [`SHORTCUTS.md`](SHORTCUTS.md) for the keymap cheatsheet
 
@@ -28,6 +29,12 @@ My personal Neovim setup — **LazyVim** underneath, tuned for **competitive pro
 - **Formatting** — ESLint LSP fixes run first, then one formatter per save: Biome when the project has `biome.json`/`biome.jsonc`, otherwise Prettier from the project (or Mason). Format on save is LazyVim's own hook; toggle it with `Space uf`.
 - **Debugging** — `Space dc` in a JS/TS buffer offers `Next.js: server-side`, `Next.js: attach to server`, and `Next.js: client-side (Chrome)` next to LazyVim's generic Launch/Attach entries. Client-side debugging requires Chrome or Chromium.
 - **Tools** — Mason auto-installs `tailwindcss-language-server`, `html-lsp`, `css-lsp`, `emmet-language-server`, `prisma-language-server`, `sqls`, `biome`, and the configured formatters/linters on first start.
+
+## Tests and linting
+
+- **Tests** — `Space tt` runs the current file, `Space tr` the nearest test, `Space tT` everything, `Space ts` the summary. Both `neotest-vitest` and `neotest-jest` are registered; each adapter activates only when the nearest `package.json` lists that runner, so a Vitest NestJS app and a Jest repository work without switching adapters.
+- **oxlint** — nvim-lint runs the project-local `node_modules/.bin/oxlint` on JS/TS buffers when saving and when leaving insert mode. The editor uses oxlint's fast default mode; `bun run lint` remains the authoritative type-aware pass (`--type-aware` needs `oxlint-tsgolint`). Projects without oxlint are unaffected.
+- **ESLint** — still enabled for repositories that have an ESLint config. It does not start in this NestJS repo, which has none.
 
 ## Prisma and SQL
 

@@ -195,6 +195,11 @@ help, `q` or `Esc` closes it.
 | `Space ud` | Toggle diagnostics |
 | `Space uh` | Toggle inlay hints (TypeScript) |
 
+Linting: ESLint runs as a language server where the project has an ESLint
+config, and oxlint runs through nvim-lint where the project has `oxlint`
+installed in `node_modules`. A missing tool is skipped, not reported as an
+error.
+
 ## Next.js snippets
 
 Type the prefix in a `.tsx` buffer (`typescriptreact`) and accept it with Blink
@@ -285,6 +290,10 @@ supported by js-debug's client-side mode).
 | `Space tw` | Toggle watch |
 | `Space ta` | Attach to a test |
 | `Space td` | Debug nearest test |
+
+Vitest and Jest are both wired up. The adapter is chosen from the nearest
+`package.json`, so the same keys work in a Vitest NestJS app and in a Jest
+project without changing anything.
 
 ## Terminal
 
