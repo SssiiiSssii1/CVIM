@@ -42,13 +42,13 @@ end
 local function apply_gutter_highlights()
   local p = cyberdream_palette()
 
-  -- Transparent terminals remove the normal background, so very dark line
-  -- numbers disappear. Give the number/sign columns Cyberdream's own panel
-  -- background and brighter palette colors instead.
+  -- Transparent terminals remove the normal background, so Cyberdream's very
+  -- dark default line numbers disappear. Use brighter palette colors while
+  -- keeping the gutter transparent like the rest of the theme.
   for _, name in ipairs({ "LineNr", "LineNrAbove", "LineNrBelow", "SignColumn", "FoldColumn" }) do
-    set_hl(name, { fg = p.grey, bg = p.bg_alt })
+    set_hl(name, { fg = p.grey, bg = "NONE" })
   end
-  set_hl("CursorLineNr", { fg = p.fg, bg = p.bg_highlight })
+  set_hl("CursorLineNr", { fg = p.fg, bg = "NONE" })
 end
 
 return {
