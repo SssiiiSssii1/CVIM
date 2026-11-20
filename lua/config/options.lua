@@ -9,6 +9,9 @@ vim.opt.shada = "!,'200,<50,s10,h,r/tmp/,r/private/"
 vim.opt.ambiwidth = "single"
 vim.opt.winborder = "rounded"
 
+-- Empty lines should not be filled with "~" markers.
+vim.opt.fillchars:append({ eob = " " })
+
 -- Quiet startup/checkhealth by disabling providers this config does not use.
 vim.g.loaded_gzip = 1
 vim.g.loaded_tarPlugin = 1
