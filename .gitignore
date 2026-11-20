@@ -1,20 +1,34 @@
-tt.*
-.tests
-doc/tags
-debug
-.repro
-foo.*
-*.log
-data
-
-# Nested CVIM checkout folder — this dir itself is now the CVIM repo
-CVIM/
-
-# local-only editor cruft
+# Local Neovim state and editor cruft
 .DS_Store
+Thumbs.db
+*~
 *.swp
 *.swo
 *.bak
+*.orig
+*.rej
+*.tmp
+*.log
+doc/tags
+.luarc.json
 
-# superseded draft of BEGINNER_GUIDE.md — keep locally, skip in repo
+# Temporary/debug artifacts
+debug/
+.repro/
+data/
+foo.*
+tt.*
+CVIM/
 Untitled
+
+# Competitive programming build artifacts
+.cp-build/
+input.txt
+expected.txt
+
+# Compiled binaries and shared objects
+*.o
+*.so
+*.out
+
+# Keep tracked: init.lua, lua/, snippets/, lazy-lock.json

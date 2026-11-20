@@ -201,7 +201,19 @@ function M.test()
     return (value:gsub("\r\n", "\n"):gsub("%s+$", ""))
   end
 
-  local passed = has_expected and normalize(stdout) == normalize(expected) or nil
+  local normalized_stdout = normalize(stdout)
+  local normalized_expected = normalize(expected)
+  local has_authored_expected = has_expected and normalized_expected ~= ""
+
+  local passed
+  if not has_authored_expected then
+    passed = nil
+  elseif result.code ~= 0 or normalized_stdout ~= normalized_expected then
+    passed = false
+  else
+    passed = true
+  end
+
   local verdict = passed == nil and "**output only**" or (passed and "**PASS**" or "**FAIL**")
 
   local lines = {
@@ -220,7 +232,7 @@ function M.test()
     vim.list_extend(lines, { "", "## Stderr", "```text", stderr:gsub("\n$", ""), "```" })
   end
 
-  if has_expected and not passed then
+  if has_authored_expected and not passed then
     vim.list_extend(lines, { "", "## Expected", "```text", expected:gsub("\n$", ""), "```" })
   end
 
