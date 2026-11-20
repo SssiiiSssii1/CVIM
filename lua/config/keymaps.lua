@@ -3,7 +3,7 @@ local map = vim.keymap.set
 local M = {}
 
 --- Which-key group names. Kept here so all user-facing key organization lives
---- in one file; registered with which-key below when it is available.
+--- in one file; registered by the which-key plugin config when it loads.
 M.groups = {
   ["<leader>f"] = "Find",
   ["<leader>g"] = "Git",
@@ -287,12 +287,12 @@ map("n", "<leader>rN", function()
   end
 end, { desc = "CP: New C++ solution" })
 
-pcall(function()
+function M.register_groups()
   local specs = {}
   for prefix, name in pairs(M.groups) do
     specs[#specs + 1] = { prefix, group = name }
   end
   require("which-key").add(specs)
-end)
+end
 
 return M

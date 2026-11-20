@@ -14,5 +14,11 @@ return {
         border = "rounded",
       },
     },
+    config = function(_, opts)
+      -- which-key v3 queues specs added with add() until setup() runs, so add
+      -- the group specs first and let setup() install them in one pass.
+      require("config.keymaps").register_groups()
+      require("which-key").setup(opts)
+    end,
   },
 }
