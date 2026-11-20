@@ -58,14 +58,13 @@ function M.apply_highlights()
     return
   end
 
-  -- Keep the bar minimal and transparent; emphasize content with foreground
-  -- accents and a subtle, distinct clock section on the far right.
+  -- Keep the bar minimal and transparent. The clock is rendered as standalone
+  -- text on the far right (no background block) with a subtle accent color.
   hi("StatusLine", { fg = p.fg, bg = "NONE" })
   hi("StatusLineNC", { fg = p.grey, bg = "NONE" })
   hi("CvimStatusLineFile", { fg = p.fg, bg = "NONE" })
   hi("CvimStatusLineMeta", { fg = p.grey, bg = "NONE" })
-  hi("CvimStatusLineSep", { fg = p.bg_highlight, bg = "NONE" })
-  hi("CvimStatusLineClock", { fg = p.cyan, bg = p.bg_highlight, bold = true })
+  hi("CvimStatusLineClock", { fg = p.cyan, bg = "NONE", bold = true })
 end
 
 local function filetype_label()
@@ -78,7 +77,7 @@ end
 
 function M.clock()
   -- os.date uses the system's local timezone.
-  return " 󰥔 " .. os.date("%I:%M %p") .. " "
+  return "󰥔 " .. os.date("%I:%M %p")
 end
 
 function M.render()
@@ -95,7 +94,7 @@ function M.render()
     parts[#parts + 1] = ft .. "  "
   end
 
-  parts[#parts + 1] = "%l:%c  %p%%"
+  parts[#parts + 1] = "%l:%c  %p%%  "
   parts[#parts + 1] = "%#CvimStatusLineClock#"
   parts[#parts + 1] = "%{%v:lua.require'config.statusline'.clock()%}"
   parts[#parts + 1] = "%#StatusLine#"
@@ -103,14 +102,25 @@ function M.render()
   return table.concat(parts)
 end
 
-function M.setup()
+local function apply()
   vim.o.laststatus = 3
   vim.o.statusline = "%!v:lua.require'config.statusline'.render()"
+end
 
+function M.setup()
+  apply()
   M.apply_highlights()
+
   vim.api.nvim_create_autocmd("ColorScheme", {
     group = augroup,
     callback = M.apply_highlights,
+  })
+
+  -- Keep the statusline (and clock) visible even on special UIs like the
+  -- Snacks dashboard, which may override statusline options.
+  vim.api.nvim_create_autocmd({ "VimEnter", "BufWinEnter", "FileType", "WinEnter" }, {
+    group = augroup,
+    callback = apply,
   })
 
   local timer = vim.uv.new_timer()
