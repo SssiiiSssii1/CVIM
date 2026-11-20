@@ -15,10 +15,10 @@ return {
       },
     },
     config = function(_, opts)
-      -- which-key v3 queues specs added with add() until setup() runs, so add
-      -- the group specs first and let setup() install them in one pass.
-      require("config.keymaps").register_groups()
+      -- Set which-key up first, then register the custom group labels through
+      -- its public add() API. No startup pcall hides registration failures.
       require("which-key").setup(opts)
+      require("config.keymaps").register_groups()
     end,
   },
 }
