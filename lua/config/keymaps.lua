@@ -115,6 +115,11 @@ end
 
 -- Files, editing and windows ------------------------------------------------
 map("n", "<leader>w", "<cmd>write<cr>", { desc = "Save file" })
+-- Neovim 0.12 binds <C-s> to signature help in insert/select mode by default,
+-- which shows "No available signature" when the cursor isn't inside a call.
+-- Use the familiar Ctrl+S for saving instead (blink.cmp keeps <C-k> for
+-- signature help).
+map({ "n", "i", "s" }, "<C-s>", "<cmd>write<cr>", { desc = "Save file" })
 map("n", "<leader>q", "<cmd>quit<cr>", { desc = "Close window" })
 map("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear search highlight" })
 
